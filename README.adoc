@@ -1,1 +1,4 @@
-= kak-jira
+kak-jira
+========
+
+JIRA syntax files for Kakoune.

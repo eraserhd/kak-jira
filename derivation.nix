@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "TODO: fill me in";
+    description = "JIRA syntax files for Kakoune";
     homepage = "https://github.com/eraserhd/kak-jira";
     license = licenses.publicDomain;
     platforms = platforms.all;
