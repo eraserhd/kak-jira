@@ -9,6 +9,6 @@ let
 in {
   test = pkgs.runCommandNoCC "kak-jira-test" {} ''
     mkdir -p $out
-    : ${pkgs.kak-jira}
+    : ${pkgs.kakounePlugins.kak-jira}
   '';
 }

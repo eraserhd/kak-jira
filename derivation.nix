@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "";
   };
 
+  installPhase = ''
+    mkdir -p $out/share/kak/autoload/plugins/
+    cp rc/jira.kak $out/share/kak/autoload/plugins/
+  '';
+
   meta = with stdenv.lib; {
     description = "JIRA syntax files for Kakoune";
     homepage = "https://github.com/eraserhd/kak-jira";

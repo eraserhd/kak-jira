@@ -1,5 +1,7 @@
 self: super: {
-  kak-jira = super.callPackage ./derivation.nix {
-    fetchFromGitHub = _: ./.;
+  kakounePlugins = super.kakounePlugins // {
+    kak-jira = super.callPackage ./derivation.nix {
+      fetchFromGitHub = _: ./.;
+    };
   };
 }

@@ -5,4 +5,4 @@ let
     overlays = [ (import ./overlay.nix) ];
   };
 
-in pkgs.kak-jira
+in pkgs.kakounePlugins.kak-jira
