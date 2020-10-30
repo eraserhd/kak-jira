@@ -41,17 +41,15 @@ add-highlighter shared/jira/ regex ^h[2-6]\.[^\n]*$ 0:header
 #add-highlighter shared/jira/ regex ^(~{3,})\n[^\n\h].*?\n(~{3,})$ 0:block
 #add-highlighter shared/jira/ regex ^(\*{3,})\n[^\n\h].*?\n(\*{3,})$ 0:block
 
-# Monospaced text
+# Monospaced
 add-highlighter shared/jira/ regex \B(?:\{\{(?:[^\\\n]|\\[^\n])*?\}\})\B 0:mono
 
-# Bolded text
-#add-highlighter shared/jira/ regex \s\*[^\n\*]+?\*\B 0:+b
-#add-highlighter shared/jira/ regex \h\*[^\n\*]+?\*\B 0:+b
+# Strong
+add-highlighter shared/jira/ regex \s\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0:+b
+add-highlighter shared/jira/ regex \h\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0:+b
 
-# Italicized text
-# (these are simpler since they aren't able to _also_ be bullet characters.)
-#add-highlighter shared/jira/ regex \b_[^\n]+?_\b 0:+i
-#add-highlighter shared/jira/ regex __[^\n]+?__ 0:+i
+# Emphasis
+add-highlighter shared/jira/ regex \b_(?:[^\\\n_]|\\[^\n])+?_\b 0:+i
 
 # Attributes
 #add-highlighter shared/jira/ regex ^:(?:(?<neg>!?)[-\w]+|[-\w]+(?<neg>!?)): 0:meta neg:operator
