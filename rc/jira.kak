@@ -10,7 +10,7 @@ hook global BufCreate .+\.jira %{
 # Initialization
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 
-hook -group jira-load-languages global WinSetOption filetype=markdown %{
+hook -group jira-load-languages global WinSetOption filetype=jira %{
     hook -group jira-load-languages window NormalIdle .* jira-load-languages
     hook -group jira-load-languages window InsertIdle .* jira-load-languages
 }
