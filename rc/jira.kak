@@ -22,14 +22,6 @@ hook -group jira-highlight global WinSetOption filetype=jira %{
     hook -once -always window WinSetOption filetype=.* %{ remove-highlighter window/jira }
 }
 
-declare-option -hidden str-to-str-map jira_language_mappings
-  # ActionScript, Ada, AppleScript, C#, Erlang, Go, Groovy, Haskell,
-  # HTML, JavaScript, JSON, Lua, Nyan, Objc, Perl, PHP, Python, R, Ruby, Scala,
-  # SQL, Swift, VisualBasic.
-set-option -add global jira_language_mappings \
-  ':c=c' ':cpp=cpp' ':c++=cpp' ':css=css' ':go=go' '=java' ':java=java' ':bash=sh' \
-  ':sql=sql' ':xml=xml'
-
 provide-module jira %{
 
 # Highlighters
@@ -50,15 +42,23 @@ add-highlighter shared/jira/inline/text/ regex ^\h*(?<bullet>[-\*#]+)\h+[^\n]+(\
 # Code
 # ‾‾‾‾‾‾‾‾‾‾‾‾
 
-#FIXME:
-evaluate-commands %sh{
-  eval set -- "$kak_quoted_opt_jira_language_mappings"
-  while [ $# -gt 0 ]; do
-    lang="${1##*=}"
-    shift
-    printf 'try %%{ remove-highlighter shared/jira/%s }\n' "$lang"
-  done
-}
+# Supported by JIRA, but not supported by Kakoune as of 2020-10-30:
+#   ActionScript, Ada, AppleScript, C#, Erlang, Groovy, Nyan, R, VisualBasic.
+declare-option -hidden str-to-str-map jira_language_mappings \
+  ':c=c' ':cpp=cpp' ':c++=cpp' ':css=css' ':go=go' ':haskell=haskell' ':html=html' \
+  '=java' ':java=java' ':javascript=javascript' ':json=json' ':lua=lua' ':objc=objc' \
+  ':perl=perl' ':php=php' ':python=python' ':ruby=ruby' \
+  ':scala=scala' ':bash=sh' ':sql=sql' ':swift=swift' ':xml=xml'
+
+# For debugging:
+#evaluate-commands %sh{
+#  eval set -- "$kak_quoted_opt_jira_language_mappings"
+#  while [ $# -gt 0 ]; do
+#    lang="${1##*=}"
+#    shift
+#    printf 'try %%{ remove-highlighter shared/jira/%s }\n' "$lang"
+#  done
+#}
 evaluate-commands %sh{
   eval set -- "$kak_quoted_opt_jira_language_mappings"
   langs=' '
@@ -80,11 +80,6 @@ evaluate-commands %sh{
   done
 }
 
-#add-highlighter shared/jira/ regex ^(-{3,})\n[^\n\h].*?\n(-{3,})$ 0:block
-#add-highlighter shared/jira/ regex ^(={3,})\n[^\n\h].*?\n(={3,})$ 0:block
-#add-highlighter shared/jira/ regex ^(~{3,})\n[^\n\h].*?\n(~{3,})$ 0:block
-#add-highlighter shared/jira/ regex ^(\*{3,})\n[^\n\h].*?\n(\*{3,})$ 0:block
-
 # Monospaced
 add-highlighter shared/jira/inline/text/ regex \B(?:\{\{(?:[^\\\n]|\\[^\n])*?\}\})\B 0:mono
 
@@ -94,24 +89,6 @@ add-highlighter shared/jira/inline/text/ regex \h\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0
 
 # Emphasis
 add-highlighter shared/jira/inline/text/ regex \b_(?:[^\\\n_]|\\[^\n])+?_\b 0:+i
-
-# Attributes
-#add-highlighter shared/jira/ regex ^:(?:(?<neg>!?)[-\w]+|[-\w]+(?<neg>!?)): 0:meta neg:operator
-#add-highlighter shared/jira/ regex [^\\](\{[-\w]+\})[^\\]? 1:meta
-
-# Options
-#add-highlighter shared/jira/ regex ^\[[^\n]+\]$ 0:operator
-
-# Admonition pargraphs
-#add-highlighter shared/jira/ regex ^(NOTE|TIP|IMPORTANT|CAUTION|WARNING): 0:block
-#add-highlighter shared/jira/ regex ^\[(NOTE|TIP|IMPORTANT|CAUTION|WARNING)\]$ 0:block
-
-# Links, inline macros
-#add-highlighter shared/jira/ regex \b((?:https?|ftp|irc://)[^\h\[]+)\[([^\n]*)?\] 1:link 2:+i
-#add-highlighter shared/jira/ regex (link|mailto):([^\n]+)(?:\[([^\n]*)\]) 1:keyword 2:link 3:+i
-#add-highlighter shared/jira/ regex (xref):([^\n]+)(?:\[([^\n]*)\]) 1:keyword 2:meta 3:+i
-#add-highlighter shared/jira/ regex (<<([^\n><]+)>>) 1:link 2:meta
-
 
 # Commands
 # ‾‾‾‾‾‾‾‾
