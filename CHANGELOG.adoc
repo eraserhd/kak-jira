@@ -2,3 +2,5 @@
 
 == Unreleased
 
+* Implement headers, strong, emphasis, monospaced
+* Implement code block formatting
