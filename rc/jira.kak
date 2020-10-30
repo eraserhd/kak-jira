@@ -31,9 +31,9 @@ add-highlighter shared/jira/ regex ^h[2-6]\.[^\n]*$ 0:header
 # List titles
 #add-highlighter shared/jira/ regex ^\.[^\h\W][^\n]*$ 0:title
 
-# Bulleted lists
-#add-highlighter shared/jira/ regex ^\h*(?<bullet>[-\*])\h+[^\n]+$ 0:list bullet:bullet
-#add-highlighter shared/jira/ regex ^\h*(?<bullet>[-\*]+)\h+[^\n]+(\n\h+[^-\*\n]*)?$ 0:list bullet:bullet
+# Bulleted and numbered lists
+add-highlighter shared/jira/ regex ^\h*(?<bullet>[-\*#])\h+[^\n]+$ 0:list bullet:bullet
+add-highlighter shared/jira/ regex ^\h*(?<bullet>[-\*#]+)\h+[^\n]+(\n\h+[^-\*\n]*)?$ 0:list bullet:bullet
 
 # Blocks
 #add-highlighter shared/jira/ regex ^(-{3,})\n[^\n\h].*?\n(-{3,})$ 0:block
