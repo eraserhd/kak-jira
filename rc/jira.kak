@@ -10,12 +10,25 @@ hook global BufCreate .+\.jira %{
 # Initialization
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 
+hook -group jira-load-languages global WinSetOption filetype=markdown %{
+    hook -group jira-load-languages window NormalIdle .* jira-load-languages
+    hook -group jira-load-languages window InsertIdle .* jira-load-languages
+}
+
 hook -group jira-highlight global WinSetOption filetype=jira %{
     require-module jira
-
+    try %{ require-module java }
     add-highlighter window/jira ref jira
     hook -once -always window WinSetOption filetype=.* %{ remove-highlighter window/jira }
 }
+
+declare-option -hidden str-to-str-map jira_language_mappings
+  # ActionScript, Ada, AppleScript, C#, Erlang, Go, Groovy, Haskell,
+  # HTML, JavaScript, JSON, Lua, Nyan, Objc, Perl, PHP, Python, R, Ruby, Scala,
+  # SQL, Swift, VisualBasic.
+set-option -add global jira_language_mappings \
+  ':c=c' ':cpp=cpp' ':c++=cpp' ':css=css' ':go=go' '=java' ':java=java' ':bash=sh' \
+  ':sql=sql' ':xml=xml'
 
 provide-module jira %{
 
@@ -37,19 +50,33 @@ add-highlighter shared/jira/inline/text/ regex ^\h*(?<bullet>[-\*#]+)\h+[^\n]+(\
 # Code
 # ‾‾‾‾‾‾‾‾‾‾‾‾
 
+#FIXME:
 evaluate-commands %sh{
-  languages="
-    cpp java
-  "
-  for lang in $languages; do
-    if [ "$lang" = java ]; then
-      lang_part="(?::java)?"
-    else
-      lang_part=":$lang"
-    fi
-    printf 'add-highlighter shared/jira/%s region -match-capture ^\\{code%s\\}\\h* ^\\{code\\}\h* regions\n' "$lang" "$lang_part"
-    printf 'add-highlighter shared/jira/%s/ default-region fill meta\n' "$lang"
-    printf 'add-highlighter shared/jira/%s/inner region \A\\{code:.*?\\}\\K (?=\\{code\\}) ref %s\n' "$lang" "$lang"
+  eval set -- "$kak_quoted_opt_jira_language_mappings"
+  while [ $# -gt 0 ]; do
+    lang="${1##*=}"
+    shift
+    printf 'try %%{ remove-highlighter shared/jira/%s }\n' "$lang"
+  done
+}
+evaluate-commands %sh{
+  eval set -- "$kak_quoted_opt_jira_language_mappings"
+  langs=' '
+  while [ $# -gt 0 ]; do
+    pattern="${1%=*}"
+    lang="${1##*=}"
+    shift
+    case "$langs" in
+      *" $lang "*) ;;
+                *) langs="$langs $lang ";;
+    esac
+    eval 'lang_'"$lang"'_patterns="${lang_'"$lang"'_patterns}|\Q${pattern}\E"'
+  done
+  for lang in $langs; do
+    eval 'pattern="${lang_'"$lang"'_patterns#|}"'
+    printf 'add-highlighter shared/jira/%s region -match-capture ^\\{code(?i)(?:%s)(?I)\\}\\h* ^\\{code\\}\\h* regions\n' "$lang" "$pattern"
+    printf 'add-highlighter shared/jira/%s/ default-region fill comment\n' "$lang"
+    printf 'add-highlighter shared/jira/%s/inner region \A\\{code.*?\\}\\K (?=\\{code\\}) ref %s\n' "$lang" "$lang"
   done
 }
 
@@ -88,5 +115,41 @@ add-highlighter shared/jira/inline/text/ regex \b_(?:[^\\\n_]|\\[^\n])+?_\b 0:+i
 
 # Commands
 # ‾‾‾‾‾‾‾‾
+
+define-command -hidden jira-load-languages %{
+    evaluate-commands -draft %{
+        try %{
+            execute-keys 'gtGbGls\{code:\K[^\}]+<ret>'
+            evaluate-commands %sh{
+              module_names=''
+              add_module_name() {
+                case " $module_names " in
+                  *" $1 "*) ;;
+                         *) module_names="${module_names} $1";;
+                esac
+              }
+              find_module_name() {
+                specified=`printf %s "$1" |tr 'A-Z' 'a-z'`
+                eval set -- "$kak_quoted_opt_jira_language_mappings"
+                while [ $# -gt 0 ]; do
+                  if [ "${1%=*}" = ":$specified" ]; then
+                    add_module_name "${1##*=}"
+                    break
+                  fi
+                  shift
+                done
+              }
+              eval set -- "$kak_quoted_selections"
+              while [ $# -gt 0 ]; do
+                find_module_name "$1"
+                shift
+              done
+              for module_name in $module_names; do
+                printf 'try %%{ require-module %s }\n' "$module_name"
+              done
+            }
+        }
+    }
+}
 
 }
