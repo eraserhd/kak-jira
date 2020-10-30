@@ -42,7 +42,7 @@ add-highlighter shared/jira/ regex ^h[2-6]\.[^\n]*$ 0:header
 #add-highlighter shared/jira/ regex ^(\*{3,})\n[^\n\h].*?\n(\*{3,})$ 0:block
 
 # Monospaced text
-#add-highlighter shared/jira/ regex \B(?:\{\{[^\n]*?\}\})\B 0:mono
+add-highlighter shared/jira/ regex \B(?:\{\{(?:[^\\\n]|\\[^\n])*?\}\})\B 0:mono
 
 # Bolded text
 #add-highlighter shared/jira/ regex \s\*[^\n\*]+?\*\B 0:+b
