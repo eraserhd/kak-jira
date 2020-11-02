@@ -39,6 +39,21 @@ add-highlighter shared/jira/inline/text/ regex ^h[2-6]\.[^\n]*$ 0:header
 add-highlighter shared/jira/inline/text/ regex ^\h*(?<bullet>[-\*#])\h+[^\n]+$ 0:list bullet:bullet
 add-highlighter shared/jira/inline/text/ regex ^\h*(?<bullet>[-\*#]+)\h+[^\n]+(\n\h+[^-\*\n]*)?$ 0:list bullet:bullet
 
+# Monospaced
+add-highlighter shared/jira/inline/text/ regex \B(?:\{\{(?:[^\\\n]|\\[^\n])*?\}\})\B 0:mono
+
+# Strong
+add-highlighter shared/jira/inline/text/ regex \s\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0:+b
+add-highlighter shared/jira/inline/text/ regex \h\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0:+b
+
+# Emphasis
+add-highlighter shared/jira/inline/text/ regex \b_(?:[^\\\n_]|\\[^\n])+?_\b 0:+i
+
+# Noformat
+add-highlighter shared/jira/noformat region -match-capture ^\{noformat\}\h* ^\{noformat\}\h* regions
+add-highlighter shared/jira/noformat/ default-region fill comment
+add-highlighter shared/jira/noformat/inner region \A\{noformat\}\K (?=\{noformat\}) fill mono
+
 # Code
 # ‾‾‾‾‾‾‾‾‾‾‾‾
 
@@ -79,16 +94,6 @@ evaluate-commands %sh{
     printf 'add-highlighter shared/jira/%s/inner region \A\\{code.*?\\}\\K (?=\\{code\\}) ref %s\n' "$lang" "$lang"
   done
 }
-
-# Monospaced
-add-highlighter shared/jira/inline/text/ regex \B(?:\{\{(?:[^\\\n]|\\[^\n])*?\}\})\B 0:mono
-
-# Strong
-add-highlighter shared/jira/inline/text/ regex \s\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0:+b
-add-highlighter shared/jira/inline/text/ regex \h\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0:+b
-
-# Emphasis
-add-highlighter shared/jira/inline/text/ regex \b_(?:[^\\\n_]|\\[^\n])+?_\b 0:+i
 
 # Commands
 # ‾‾‾‾‾‾‾‾
