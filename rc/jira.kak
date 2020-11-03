@@ -49,6 +49,10 @@ add-highlighter shared/jira/inline/text/ regex \h\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0
 # Emphasis
 add-highlighter shared/jira/inline/text/ regex \b_(?:[^\\\n_]|\\[^\n])+?_\b 0:+i
 
+# Added/Deleted (try until Kakoune has had strikethrough for a while)
+add-highlighter shared/jira/inline/text/ regex \+(?:[^\\\n+]|\\[^\n])+?\+ 0:+u
+try %{ add-highlighter -- shared/jira/inline/text/ regex -(?:[^\\\n-]|\\[^\n])+?- 0:+s }
+
 # Noformat
 add-highlighter shared/jira/noformat region -match-capture ^\{noformat\}\h* ^\{noformat\}\h* regions
 add-highlighter shared/jira/noformat/ default-region fill comment
