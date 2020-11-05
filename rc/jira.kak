@@ -74,6 +74,8 @@ add-highlighter shared/jira/quote region -match-capture ^\{quote\}\h* ^\{quote\}
 add-highlighter shared/jira/quote/ default-region fill comment
 add-highlighter shared/jira/quote/inner region \A\{quote\}\K (?=\{quote\}) fill value
 
+add-highlighter shared/jira/inline/text/ regex ^(bq\.\h*)([^\n]*) 1:comment 2:value
+
 # Code
 # ‾‾‾‾‾‾‾‾‾‾‾‾
 
