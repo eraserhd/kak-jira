@@ -49,6 +49,10 @@ add-highlighter shared/jira/inline/text/ regex \h\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0
 # Emphasis
 add-highlighter shared/jira/inline/text/ regex \b_(?:[^\\\n_]|\\[^\n])+?_\b 0:+i
 
+# Superscript/Subscript
+add-highlighter shared/jira/inline/text/ regex \B(\^)((?:[^\\\n^]|\\[^\n])+)(\^)\B 1:comment 2:meta 3:comment
+add-highlighter shared/jira/inline/text/ regex \B(~)((?:[^\\\n^]|\\[^\n])+)(~)\B 1:comment 2:string 3:comment
+
 # Added/Deleted (try until Kakoune has had strikethrough for a while)
 add-highlighter shared/jira/inline/text/ regex \+(?:[^\\\n+]|\\[^\n])+?\+ 0:+u
 try %{ add-highlighter -- shared/jira/inline/text/ regex -(?:[^\\\n-]|\\[^\n])+?- 0:+s }
@@ -112,7 +116,7 @@ evaluate-commands %sh{
 define-command -hidden jira-load-languages %{
     evaluate-commands -draft %{
         try %{
-            execute-keys 'gtGbGls\{code:\K[^\}]+<ret>'
+execute-keys 'gtGbGls\{code:\K[^\}]+<ret>'
             evaluate-commands %sh{
               module_names=''
               add_module_name() {
