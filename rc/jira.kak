@@ -69,6 +69,11 @@ add-highlighter shared/jira/noformat region -match-capture ^\{noformat\}\h* ^\{n
 add-highlighter shared/jira/noformat/ default-region fill comment
 add-highlighter shared/jira/noformat/inner region \A\{noformat\}\K (?=\{noformat\}) fill mono
 
+# Quotes
+add-highlighter shared/jira/quote region -match-capture ^\{quote\}\h* ^\{quote\}\h* regions
+add-highlighter shared/jira/quote/ default-region fill comment
+add-highlighter shared/jira/quote/inner region \A\{quote\}\K (?=\{quote\}) fill value
+
 # Code
 # ‾‾‾‾‾‾‾‾‾‾‾‾
 
