@@ -64,6 +64,9 @@ add-highlighter shared/jira/inline/text/ regex ^\{anchor:[^}\n]*\} 0:meta
 # Images and Attachments
 add-highlighter shared/jira/inline/text/ regex ^!(?:[^!\\\n]|\\[^\n])*! 0:meta
 
+# Citations
+add-highlighter shared/jira/inline/text/ regex (\?\?)((?:[^\\\n]|\\.)*?)(\?\?) 1:comment 2:link 3:comment
+
 # Noformat
 add-highlighter shared/jira/noformat region -match-capture ^\{noformat\}\h* ^\{noformat\}\h* regions
 add-highlighter shared/jira/noformat/ default-region fill comment
