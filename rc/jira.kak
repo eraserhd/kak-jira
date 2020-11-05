@@ -54,8 +54,8 @@ add-highlighter shared/jira/inline/text/ regex \B(\^)((?:[^\\\n^]|\\[^\n])+)(\^)
 add-highlighter shared/jira/inline/text/ regex \B(~)((?:[^\\\n^]|\\[^\n])+)(~)\B 1:comment 2:string 3:comment
 
 # Added/Deleted (try until Kakoune has had strikethrough for a while)
-add-highlighter shared/jira/inline/text/ regex \+(?:[^\\\n+]|\\[^\n])+?\+ 0:+u
-try %{ add-highlighter -- shared/jira/inline/text/ regex -(?:[^\\\n-]|\\[^\n])+?- 0:+s }
+add-highlighter shared/jira/inline/text/ regex (\+)((?:[^\\\n+]|\\[^\n])+?)(\+) 1:comment 2:+u 3:comment
+try %{ add-highlighter -- shared/jira/inline/text/ regex (-)((?:[^\\\n-]|\\[^\n])+?)(-) 1:comment 2:+s 3:comment }
 
 # Links
 add-highlighter shared/jira/inline/text/ regex \[[^\]\n]*\] 0:link
