@@ -43,8 +43,8 @@ add-highlighter shared/jira/inline/text/ regex ^\h*(?<bullet>[-\*#]+)\h+[^\n]+(\
 add-highlighter shared/jira/inline/text/ regex \B(\{\{)((?:[^\\\n]|\\[^\n])*?)(\}\})\B 1:comment 2:mono 3:comment
 
 # Strong
-add-highlighter shared/jira/inline/text/ regex \s\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0:+b
-add-highlighter shared/jira/inline/text/ regex \h\*(?:[^\\\n\*]|\\[^\n])+?\*\B 0:+b
+add-highlighter shared/jira/inline/text/ regex \s(\*)((?:[^\\\n\*]|\\[^\n])+?)(\*)\B 1:comment 2:+b 3:comment
+add-highlighter shared/jira/inline/text/ regex \h(\*)((?:[^\\\n\*]|\\[^\n])+?)(\*)\B 1:comment 2:+b 3:comment
 
 # Emphasis
 add-highlighter shared/jira/inline/text/ regex \b_(?:[^\\\n_]|\\[^\n])+?_\b 0:+i
