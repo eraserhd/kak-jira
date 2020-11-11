@@ -22,7 +22,7 @@ hook -group jira-highlight global WinSetOption filetype=jira %{
     hook -once -always window WinSetOption filetype=.* %{ remove-highlighter window/jira }
 }
 
-provide-module jira %{
+provide-module jira %§
 
 # Highlighters
 # ‾‾‾‾‾‾‾‾‾‾‾‾
@@ -159,4 +159,4 @@ execute-keys 'gtGbGls\{code:\K[^\}]+<ret>'
     }
 }
 
-}
+§
