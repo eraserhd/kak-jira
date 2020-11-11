@@ -47,7 +47,7 @@ add-highlighter shared/jira/inline/text/ regex \s(\*)((?:[^\\\n\*]|\\[^\n])+?)(\
 add-highlighter shared/jira/inline/text/ regex \h(\*)((?:[^\\\n\*]|\\[^\n])+?)(\*)\B 1:comment 2:+b 3:comment
 
 # Emphasis
-add-highlighter shared/jira/inline/text/ regex \b_(?:[^\\\n_]|\\[^\n])+?_\b 0:+i
+add-highlighter shared/jira/inline/text/ regex \b(_)((?:[^\\\n_]|\\[^\n])+?)(_)\b 1:comment 2:+i 3:comment
 
 # Superscript/Subscript
 add-highlighter shared/jira/inline/text/ regex \B(\^)((?:[^\\\n^]|\\[^\n])+)(\^)\B 1:comment 2:meta 3:comment
