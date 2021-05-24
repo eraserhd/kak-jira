@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ... }:
+{ stdenv, lib, fetchFromGitHub, ... }:
 
 stdenv.mkDerivation rec {
   pname = "kak-jira";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp rc/jira.kak $out/share/kak/autoload/plugins/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "JIRA syntax files for Kakoune";
     homepage = "https://github.com/eraserhd/kak-jira";
     license = licenses.publicDomain;
